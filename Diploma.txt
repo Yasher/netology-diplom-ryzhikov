@@ -1,0 +1,19 @@
+1. Устанавливаем terraform, выполняем terraform -install-autocomplete
+terraform plan
+terraform apply  -auto-approve
+terraform destroy  -auto-approve
+
+2. Проблема с подключением по ssh к созданным через terraform vm - скопировать meta.txt из мануала yandex cloud (гуглим создать вм yandex cloud)
+
+sudo yum update -y
+sudo yum install epel-release -y
+sudo yum install nginx -y
+
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+
+external_ip_address_vm_1 = "51.250.81.62"
+external_ip_address_vm_2 = "51.250.78.160"
+internal_ip_address_vm_1 = "192.168.10.14"
+internal_ip_address_vm_2 = "192.168.10.5"

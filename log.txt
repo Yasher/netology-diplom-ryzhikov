@@ -1,0 +1,227 @@
+1. Установить Visual Studio Code
+2. Установил terraform инструкция на оф. сайте, в россии потребуется vpn
+3. Создал каталог проекта.
+4. Создал main.tf
+5. Создал токен в Яндекс клоуд y0_AgAAAABWsG19AATuwQAAAADX42js8tLZWSu_SB2WAvXZFeDnocSryXk
+Инструкция тут 
+https://cloud.yandex.ru/docs/cli/quickstart#install
+6. Создал ключ ssh - ssh-keygen
+7. Создал файл meta.txt в каталоге проекта. Прописал в него
+
+users:
+
+ - name: user
+
+   groups: sudo
+
+   shell: /bin/bash
+
+   sudo: ['ALL=(ALL) NOPASSWD:ALL']
+
+   ssh-authorized-keys:
+
+     - ssh-rsa  xxx
+
+ 
+
+где xxx - это ключ из файла /home/"name_user"/.ssh/id_rsa.pub.
+
+
+8. Создал файл main.tf
+
+Пример на гите.
+Для подключения прописать данные 
+
+provider "yandex" {
+  token     = "y0_AgAAAABWsG19AATuwQAAAADX42js8tLZWSu_SB2WAvXZFeDnocSryXk" - созданный токен в пункте 5
+  cloud_id  = "b1gfvdpsmg19e92jen9i" - id облака
+  folder_id = "b1g46bm46qn991og078a" - id каталога
+  zone      = "ru-central1-a"
+}
+
+
+
+9. terraform init - скачается провайдер и необх файлы терраформа в диру проекта
+10. terraform plan - проверить, что будет делать terraform
+11. terraform apply - применить конфиг - создание ВМ
+
+
+Машины создавались в одной зоне. Выяснил из доки terraform, что zone надо прописывать в самом инстансе yandex_compute_instance
+
+Для работы балансира нужно, чтобы обе vm были в одной сети network1, но в разных подсетях (subnet1, subnet2) и разных зонах (ru-central1-a, ru-central1-b)
+
+
+-- Терраформом не удалось поставить nginx на vm, поэтому установил ansible
+Ansible:
+
+1. apt update upgrade - устанавливаем свежую версию ansible
+2. копируем ansible.cfg и hosts в диру проекта.
+3. В ansible.cfg указываем remote_user и inventory - путь к hosts
+4. В плейбуке указываем become: true - для повышения прав до root
+
+
+
+-----
+
+sudo wget https://slava.fvds.ru/kt_freebie_aironepage.zip
+sudo yum install unzip
+sudo unzip kt_freebie_aironepage.zip 
+sudo cp -R aironepage/* /usr/share/nginx/html/
+sudo sed -i 's/root.*/root \/usr\/share\/nginx\/html\/HTML;/'  /etc/nginx/nginx.conf
+sudo systemctl restart nginx
+
+
+shell: "sudo wget https://slava.fvds.ru/kt_freebie_aironepage.zip && \
+sudo yum install unzip && \
+sudo unzip kt_freebie_aironepage.zip && \
+sudo cp -R aironepage/* /usr/share/nginx/html/ && \
+sudo sed -i 's/root.*/root \/usr\/share\/nginx\/html\/HTML;/'  /etc/nginx/nginx.conf && \
+sudo systemctl restart nginx"
+
+external_ip_address_vm_1 = "51.250.84.164"
+external_ip_address_vm_2 = "51.250.77.217"
+internal_ip_address_vm_1 = "192.168.10.5"
+internal_ip_address_vm_2 = "192.168.10.7"
+
+
+
+
+balancer 51.250.10.181
+
+
+
+
+-------
+
+Prometeus
+
+11. yum -y update 
+1. Установка wget
+2.
+    useradd --no-create-home --shell /bin/false prometheus
+  4  wget https://github.com/prometheus/prometheus/releases/download/v2.37.5/prometheus-2.37.5.linux-amd64.tar.gz
+    5  tar xvfz prometheus-2.37.5.linux-amd64.tar.gz 
+    6  cd prometheus-2.37.5.linux-amd64
+    7   mkdir /etc/prometheus
+    8  mkdir /var/lib/prometheus
+    9  cp ./prometheus promtool /usr/local/bin/
+   10  cp -R ./console_libraries /etc/prometheus
+   11  cp -R ./consoles /etc/prometheus
+   12  cp ./prometheus.yml /etc/prometheus
+   13  chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+   14  chown prometheus:prometheus /usr/local/bin/prometheus
+   15  chown prometheus:prometheus /usr/local/bin/promtool
+   16  /usr/local/bin/prometheus --config.file /etc/prometheus/prometheus.yml
+   17  less /etc/prometheus/prometheus.yml 
+   18  /usr/local/bin/prometheus --config.file /etc/prometheus/prometheus.yml
+
+ 20  vi /etc/systemd/system/prometheus.service
+ 
+ [Unit]
+Description=Prometheus Service Netology Lesson 9.4
+After=network.target
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+--config.file /etc/prometheus/prometheus.yml \
+--storage.tsdb.path /var/lib/prometheus/ \
+--web.console.templates=/etc/prometheus/consoles \
+--web.console.libraries=/etc/prometheus/console_libraries
+ExecReload=/bin/kill -HUP $MAINPID Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+
+   21  chown -R prometheus:prometheus /var/lib/prometheus
+   22  sudo systemctl enable prometheus
+   23  systemctl enable prometheus
+   24  systemctl start prometheus
+   25  systemctl status prometheus
+
+
+cd ~
+   28  wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+   29  tar xvfz node_exporter-1.5.0.linux-amd64.tar.gz 
+   30  cd node_exporter-1.5.0.linux-amd64
+   31  ./node_exporter
+   32  mkdir -p /etc/prometheus/node-exporter
+   33  cp ./* /etc/prometheus/node-exporter
+   34  chown -R prometheus:prometheus /etc/prometheus/node-exporter/
+   35  vi /etc/systemd/system/node-exporter.service
+   
+[Unit]
+Description=Node Exporter Lesson 9.4
+After=network.target
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/etc/prometheus/node-exporter/node_exporter
+[Install]
+WantedBy=multi-user.target
+   
+   36  systemctl enable node-exporter
+   37  systemctl start node-exporter
+   38  systemctl status node-exporter
+
+
+   48  vi /etc/prometheus/prometheus.yml
+   
+   scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090', 'localhost:9100']
+      
+   49  systemctl restart prometheus
+   50  systemctl status prometheus
+
+
+------
+Grafana
+
+
+apt update
+apt upgrade
+ wget https://slava.fvds.ru/packages/grafana-enterprise_9.3.2_amd64.deb
+dpkg -i grafana-enterprise_9.3.2_amd64.deb
+systemctl enable grafana-server
+   15  systemctl start grafana-server
+   16  systemctl status grafana-server
+   17  systemctl restart grafana-server
+   
+   
+   
+   
+   
+   -----
+   
+   Node exporter на отдельную машину
+   
+   
+   
+    useradd --no-create-home --shell /bin/false prometheus
+    wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+   29  tar xvfz node_exporter-1.5.0.linux-amd64.tar.gz 
+   30  cd node_exporter-1.5.0.linux-amd64
+   31  ./node_exporter
+   32  mkdir -p /etc/prometheus/node-exporter
+   33  cp ./* /etc/prometheus/node-exporter
+   34  chown -R prometheus:prometheus /etc/prometheus/node-exporter/
+   35  vi /etc/systemd/system/node-exporter.service
+   
+   [Unit]
+Description=Node Exporter Lesson 9.4
+After=network.target
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/etc/prometheus/node-exporter/node_exporter
+[Install]
+WantedBy=multi-user.target
+   
+   36  systemctl enable node-exporter
+   37  systemctl start node-exporter
+   38  systemctl status node-exporter
+
+
