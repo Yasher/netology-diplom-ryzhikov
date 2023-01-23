@@ -1,0 +1,7 @@
+- name: Website deploying
+  hosts: webservers
+  become: true
+  tasks:
+   - name: create site
+     shell: "sudo sed -i 's/root.*/root \/usr\/share\/nginx\/html\/HTML;/'  /etc/nginx/nginx.conf && \
+     sudo systemctl restart nginx"

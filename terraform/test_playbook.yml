@@ -1,0 +1,18 @@
+# - name: Prometheus111
+#   hosts: webservers
+#   become: true
+#   tasks:
+#   - name: Test hosts list
+#     debug:
+#     #  msg: "{{ ipvm }}"
+#      msg: "{{ inventory_hostname }}"
+#     register: my_var
+- name: Prometheus
+  hosts: prometheus
+  become: true
+  gather_facts: true
+  tasks:
+  - name: Test hosts list
+    debug:
+    #  msg: "{{ ipvm }}"
+     msg: "{{ hostvars[ 'web1' ].ansible_default_ipv4.address }}"

@@ -1,0 +1,8 @@
+#cloud-config
+ssh_pwauth: no
+users:
+  - name: yasher
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDT1ILX2E1CswjTRUbJXVCE/rr9laR0EWa6ufCp0g94MiQdjEje788BJRKd+iLRr4DGJD2IB1FwHFk0QgzBV8b0q8tX0AU6FUhjBs3ms4UZ7IGp40541VEXZJLfqP37DmtmlWSkeWDevDIxtJrPwsmp13vVGQPESw78+dBbL6M4gKMXsSLWftjCqsn9YT5WCIyEtG09lHl9Ir9L4evvs5zNZUClFXccL7DWCqyHY6S6iSxXRM6lv2XoBhfVKXSm6iCnGgEJ1x/PZfULqdWd/qxw8TIzZU8sVwnwCUjWPc+1E4Q6BYZckVRVnSE039e1KQgdhD1kOani2EuA83F63scX slava@slava-Lenovo-V130-15IKB
