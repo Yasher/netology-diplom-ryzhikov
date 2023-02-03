@@ -6,7 +6,7 @@ resource "yandex_compute_instance" "vm-6" {
 
   resources {
     cores  = 4
-    memory = 4
+    memory = 8
   }
 
   boot_disk {
@@ -35,9 +35,7 @@ resource "yandex_vpc_subnet" "subnet-2" {
     v4_cidr_blocks = ["192.168.30.0/24"]
   }
 
-#resource "yandex_vpc_network" "network-2" {
- # name = "network2"
-#}
+
 
 output "internal_ip_address_elastic" {
   value = yandex_compute_instance.vm-6.network_interface.0.ip_address

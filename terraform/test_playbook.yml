@@ -1,18 +1,11 @@
-# - name: Prometheus111
-#   hosts: webservers
-#   become: true
-#   tasks:
-#   - name: Test hosts list
-#     debug:
-#     #  msg: "{{ ipvm }}"
-#      msg: "{{ inventory_hostname }}"
-#     register: my_var
-- name: Prometheus
-  hosts: prometheus
+- name: test
+  hosts: elastic
   become: true
-  gather_facts: true
   tasks:
-  - name: Test hosts list
-    debug:
-    #  msg: "{{ ipvm }}"
-     msg: "{{ hostvars[ 'web1' ].ansible_default_ipv4.address }}"
+   - name: hjsdhjhk
+     shell: |
+      /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana -b
+     register: my_var
+
+   - debug:
+       msg: "{{ my_var }}"

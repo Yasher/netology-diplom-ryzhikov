@@ -2,23 +2,24 @@
   hosts: elastic
   become: true
   tasks:
-  #  - name: update packages
-  #    apt: 
-  #      update_cache: yes
-  #      upgrade: dist
-  #  - name: Download elastic
-  #    ansible.builtin.get_url:
-  #      url: https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb
-  #      dest: /tmp/elasticsearch-8.6.0-amd64.deb
-  #      checksum: sha512:https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb.sha512
-  #  - name: Install a .deb package
-  #    ansible.builtin.apt:
-  #      deb: /tmp/elasticsearch-8.6.0-amd64.deb
+   - name: update packages
+     apt: 
+       update_cache: yes
+       upgrade: dist
+   - name: Download elastic
+     ansible.builtin.get_url:
+       url: https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb
+       dest: /tmp/elasticsearch-8.6.0-amd64.deb
+       checksum: sha512:https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb.sha512
+   - name: Install a .deb package
+     ansible.builtin.apt:
+       deb: /tmp/elasticsearch-8.6.0-amd64.deb
    - name: disable security
-     shell: "sudo sed -i 's/xpack.security.enabled.*/xpack.security.enabled: false/' /etc/elasticsearch/elasticsearch.yml"
-   - name: start and enable elastic
-     ansible.builtin.systemd:
-      daemon_reload: yes
-      state: restarted
-      name: elasticsearch
-      enabled: yes
+     shell: "sed -i 's/xpack.security.enabled.*/xpack.security.enabled: false/' /etc/elasticsearch/elasticsearch.yml && \
+     sed -i 's/xpack.security.enrollment.enabled.*/xpack.security.enrollment.enabled: false/' /etc/elasticsearch/elasticsearch.yml"
+  #  - name: start and enable elastic
+  #    ansible.builtin.systemd:
+  #     daemon_reload: yes
+  #     state: restarted
+  #     name: elasticsearch
+  #     enabled: yes

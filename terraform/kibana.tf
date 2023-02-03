@@ -1,12 +1,12 @@
 
 resource "yandex_compute_instance" "vm-7" {
   name = "kibana"
-
+  allow_stopping_for_update = "true"
   zone        = "ru-central1-b"
 
   resources {
-    cores  = 2
-    memory = 2
+    cores  = 4
+    memory = 8
   }
 
   boot_disk {
@@ -27,10 +27,6 @@ resource "yandex_compute_instance" "vm-7" {
   }
 
 }
-
-#resource "yandex_vpc_network" "network-2" {
- # name = "network2"
-#}
 
 output "internal_ip_address_kibana" {
   value = yandex_compute_instance.vm-7.network_interface.0.ip_address

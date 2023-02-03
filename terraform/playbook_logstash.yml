@@ -1,0 +1,48 @@
+- name: Logstash deploying
+  hosts: elastic
+  become: true
+  tasks:
+    # - name: Download logstash
+    #   ansible.builtin.get_url:
+    #     url: https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb
+    #     dest: /tmp/logstash-8.6.1-amd64.deb
+    #     checksum: sha512:https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb.sha512
+    # - name: Install a .deb package
+    #   ansible.builtin.apt:
+    #     deb: /tmp/logstash-8.6.1-amd64.deb
+    - name: Creating an empty file conf
+      file:
+        path: /etc/logstash/conf.d/logstash.conf
+        state: touch
+    - name: Creating conf
+      blockinfile:
+        path: /etc/logstash/conf.d/logstash.conf
+        block: |
+          input {
+            beats {
+            port => 5044
+            }
+          }
+          filter {
+              grok {
+                match => { "message" => "%{IPORHOST:remote_ip} - %{DATA:user_name}
+          \[%{HTTPDATE:access_time}\] \"%{WORD:http_method} %{DATA:url}
+          HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:body_sent_bytes}
+          \"%{DATA:referrer}\" \"%{DATA:agent}\"" }
+              }
+              mutate {
+                  remove_field => [ "host" ]
+              }
+          }
+          output {
+              elasticsearch {
+                  hosts => ["http://localhost:9200"]
+                  data_stream => "true"
+              }
+          }
+    - name: start and enable logstash
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        state: restarted
+        name: logstash
+        enabled: yes
