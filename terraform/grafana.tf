@@ -1,5 +1,5 @@
 
-resource "yandex_compute_instance" "vm-4" {
+resource "yandex_compute_instance" "grafana" {
   name = "grafana"
 
   zone        = "ru-central1-c"
@@ -31,8 +31,8 @@ resource "yandex_compute_instance" "vm-4" {
 #}
 
 output "internal_ip_address_grafana" {
-  value = yandex_compute_instance.vm-4.network_interface.0.ip_address
+  value = yandex_compute_instance.grafana.network_interface.0.ip_address
 }
 output "external_ip_address_grafana" {
-  value = yandex_compute_instance.vm-4.network_interface.0.nat_ip_address
+  value = yandex_compute_instance.grafana.network_interface.0.nat_ip_address
 }

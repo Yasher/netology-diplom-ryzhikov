@@ -1,5 +1,5 @@
 
-resource "yandex_compute_instance" "vm-6" {
+resource "yandex_compute_instance" "elastic" {
   name = "elastic"
   allow_stopping_for_update = "true"
   zone        = "ru-central1-b"
@@ -28,18 +28,13 @@ resource "yandex_compute_instance" "vm-6" {
 
 }
 
-resource "yandex_vpc_subnet" "subnet-2" {
-    name           = "subnet2"
-    zone           = "ru-central1-b"
-    network_id     = yandex_vpc_network.network-1.id
-    v4_cidr_blocks = ["192.168.30.0/24"]
-  }
+
 
 
 
 output "internal_ip_address_elastic" {
-  value = yandex_compute_instance.vm-6.network_interface.0.ip_address
+  value = yandex_compute_instance.elastic.network_interface.0.ip_address
 }
 output "external_ip_address_elastic" {
-  value = yandex_compute_instance.vm-6.network_interface.0.nat_ip_address
+  value = yandex_compute_instance.elastic.network_interface.0.nat_ip_address
 }

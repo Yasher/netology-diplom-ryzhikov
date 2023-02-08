@@ -3,12 +3,12 @@ resource "yandex_alb_target_group" "target1" {
 
   target {
     subnet_id    = yandex_vpc_subnet.subnet-1.id
-    ip_address   = yandex_compute_instance.vm-1.network_interface.0.ip_address
+    ip_address   = yandex_compute_instance.webserver1.network_interface.0.ip_address
   }
 
   target {
     subnet_id    = yandex_vpc_subnet.subnet-2.id
-    ip_address   = yandex_compute_instance.vm-2.network_interface.0.ip_address
+    ip_address   = yandex_compute_instance.webserver2.network_interface.0.ip_address
   }
 
 }

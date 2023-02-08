@@ -1,0 +1,15 @@
+- name: test
+  hosts: elastic
+  become: true
+  tasks:
+    - name: Copy pass to kibana
+      shell: |
+        /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana -b
+      register: my_gl_var
+    - set_fact: my_var="tatata"
+    - debug:
+        msg: "{{ my_var }}"
+    - shell: |   
+        echo "{{ my_gl_var }}" > /tmp/kp
+      delegate_to: kibana
+#- include: include_playbook.yml

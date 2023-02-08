@@ -1,11 +1,19 @@
 - name: test
   hosts: elastic
   become: true
+  vars_files:
+   - vars.yml
   tasks:
    - name: hjsdhjhk
      shell: |
       /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana -b
-     register: my_var
-
+     register: my_gl_var
+   - set_fact: my_gl_var="tatata"
+- name: test
+  hosts: kibana
+  become: true
+  vars_files:
+   - vars.yml
+  tasks:
    - debug:
-       msg: "{{ my_var }}"
+       msg: "{{ my_gl_var }}"

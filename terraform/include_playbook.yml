@@ -1,0 +1,9 @@
+
+---
+- name: testd
+  hosts: kibana
+  become: true
+  tasks:
+   - name: drdrdrdrd
+     debug:
+      msg: "bfd,nv,dfv"

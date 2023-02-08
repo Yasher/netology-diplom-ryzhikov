@@ -1,5 +1,5 @@
 
-resource "yandex_compute_instance" "vm-7" {
+resource "yandex_compute_instance" "kibana" {
   name = "kibana"
   allow_stopping_for_update = "true"
   zone        = "ru-central1-b"
@@ -29,8 +29,8 @@ resource "yandex_compute_instance" "vm-7" {
 }
 
 output "internal_ip_address_kibana" {
-  value = yandex_compute_instance.vm-7.network_interface.0.ip_address
+  value = yandex_compute_instance.kibana.network_interface.0.ip_address
 }
 output "external_ip_address_kibana" {
-  value = yandex_compute_instance.vm-7.network_interface.0.nat_ip_address
+  value = yandex_compute_instance.kibana.network_interface.0.nat_ip_address
 }
