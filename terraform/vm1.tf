@@ -18,7 +18,8 @@ resource "yandex_compute_instance" "webserver1" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = false
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.webservers_sg.id]
   }
 
   metadata = {
@@ -26,9 +27,7 @@ resource "yandex_compute_instance" "webserver1" {
   }
 
 }
-resource "yandex_vpc_network" "network-1" {
-  name = "network1"
-}
+
 
 output "internal_ip_address_webserver1" {
   value = yandex_compute_instance.webserver1.network_interface.0.ip_address

@@ -64,6 +64,7 @@ resource "yandex_alb_virtual_host" "vhost1" {
 resource "yandex_alb_load_balancer" "balancer1" {
   name        = "balancer1"
   network_id  = yandex_vpc_network.network-1.id
+  security_group_ids = [yandex_vpc_security_group.balancer_sg.id]
 
   allocation_policy {
     location {

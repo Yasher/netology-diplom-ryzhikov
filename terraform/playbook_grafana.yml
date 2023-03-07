@@ -1,0 +1,25 @@
+- name: Grafana
+  hosts: grafana
+  become: true
+  tasks:
+    - name: update packages
+      apt: 
+        update_cache: yes
+        upgrade: dist
+    - name: Download grafana
+      ansible.builtin.get_url:
+        url: https://slava.fvds.ru/packages/grafana-enterprise_9.3.2_amd64.deb
+        dest: /tmp/grafana-enterprise_9.3.2_amd64.deb
+        checksum: sha256:https://slava.fvds.ru/packages/grafana-enterprise_9.3.2_amd64.deb.sha256
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /tmp/grafana-enterprise_9.3.2_amd64.deb
+    - name: start and enable grafana
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        state: restarted
+        name: grafana-server
+        enabled: yes
+
+
+        curl -X POST --insecure -H "Accept: application/json" -H "Content-Type: application/json" -d @datasource.json http://admin:pea647ch@84.201.146.109:3000/api/datasources

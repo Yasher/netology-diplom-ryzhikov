@@ -2,19 +2,20 @@
   hosts: webservers
   become: true
   tasks:
-    # - name: Download filebeat
-    #   ansible.builtin.get_url:
-    #     url: https://slava.fvds.ru/packages/filebeat-8.6.1-x86_64.rpm
-    #     dest: /tmp/filebeat-8.6.1-x86_64.rpm
-    #     checksum: sha512:https://slava.fvds.ru/packages/filebeat-8.6.1-x86_64.rpm.sha512
-    # - name: Install a .deb package
-    #   ansible.builtin.yum:
-    #      name: /tmp/filebeat-8.6.1-x86_64.rpm
-    #      state: present
+    - name: Download filebeat
+      ansible.builtin.get_url:
+        url: https://slava.fvds.ru/packages/filebeat-8.6.1-x86_64.rpm
+        dest: /tmp/filebeat-8.6.1-x86_64.rpm
+        checksum: sha512:https://slava.fvds.ru/packages/filebeat-8.6.1-x86_64.rpm.sha512
+    - name: Install a .deb package
+      ansible.builtin.yum:
+         name: /tmp/filebeat-8.6.1-x86_64.rpm
+         state: present
     - name: Download conf
       ansible.builtin.get_url:
         url: https://slava.fvds.ru/packages/filebeat.yml
         dest: /etc/filebeat/filebeat.yml
+        force: true
     - name: config filebeat
       ansible.builtin.shell: |
          sed -i 's/###host###/{{ ip_int_elastic }}/' /etc/filebeat/filebeat.yml

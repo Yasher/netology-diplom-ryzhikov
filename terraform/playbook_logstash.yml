@@ -2,14 +2,14 @@
   hosts: elastic
   become: true
   tasks:
-    # - name: Download logstash
-    #   ansible.builtin.get_url:
-    #     url: https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb
-    #     dest: /tmp/logstash-8.6.1-amd64.deb
-    #     checksum: sha512:https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb.sha512
-    # - name: Install a .deb package
-    #   ansible.builtin.apt:
-    #     deb: /tmp/logstash-8.6.1-amd64.deb
+    - name: Download logstash
+      ansible.builtin.get_url:
+        url: https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb
+        dest: /tmp/logstash-8.6.1-amd64.deb
+        checksum: sha512:https://slava.fvds.ru/packages/logstash-8.6.1-amd64.deb.sha512
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /tmp/logstash-8.6.1-amd64.deb
     - name: Creating an empty file conf
       file:
         path: /etc/logstash/conf.d/logstash.conf

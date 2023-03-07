@@ -1,10 +1,6 @@
 #!/usr/bin/bash
-ip_vm=$(terraform output external_ip_address_vm_1_test)
-ip_promet=$(terraform output external_ip_address_promet1)
+ip_int_webserver1=$(terraform output internal_ip_address_webserver1)
+ip_int_webserver2=$(terraform output internal_ip_address_webserver2)
 
-echo "[webservers]
-$ip_vm
-[prometheus]
-$ip_promet" > hosts
 
-ansible-playbook playbook_prometheus.yml -e "ip_vm=$ip_vm"
+ansible-playbook playbook_prometheus.yml -e "ip_int_webserver1=$ip_int_webserver1 ip_int_webserver2=$ip_int_webserver2"

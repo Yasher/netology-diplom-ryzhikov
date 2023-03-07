@@ -2,47 +2,45 @@
   hosts: elastic
   become: true
   tasks:
-  #  - name: update packages
-  #    apt: 
-  #      update_cache: yes
-  #      upgrade: dist
-  #  - name: Download elastic
-  #    ansible.builtin.get_url:
-  #      url: https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb
-  #      dest: /tmp/elasticsearch-8.6.0-amd64.deb
-  #      checksum: sha512:https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb.sha512
-  #  - name: Install a .deb package
-  #    ansible.builtin.apt:
-  #      deb: /tmp/elasticsearch-8.6.0-amd64.deb
-  #  - name: start and enable elastic
-  #    ansible.builtin.systemd:
-  #     daemon_reload: yes
-  #     state: restarted
-  #     name: elasticsearch
-  #     enabled: yes
-      # - name: Copy pass to kibana
-      #   shell: |
-      #     /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana -b
-      #   register: kibanapass
+    - name: update packages
+      apt: 
+        update_cache: yes
+        upgrade: dist
+    - name: Download elastic
+      ansible.builtin.get_url:
+        url: https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb
+        dest: /tmp/elasticsearch-8.6.0-amd64.deb
+        checksum: sha512:https://slava.fvds.ru/packages/elasticsearch-8.6.0-amd64.deb.sha512
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /tmp/elasticsearch-8.6.0-amd64.deb
+    - name: start and enable elastic
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        state: restarted
+        name: elasticsearch
+        enabled: yes
+    - name: Copy pass to kibana
+      shell: |
+        /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana -b
+      register: kibanapass
 
-- name: Kibana
+- name: Kibana deploying
   hosts: kibana
   become: true     
   tasks:
-      # - debug:
-      #     msg: "sdjhfkj"
-    # - name: update packages
-    #   apt: 
-    #     update_cache: yes
-    #     upgrade: dist
-    # - name: Download kibana
-    #   ansible.builtin.get_url:
-    #    url: https://slava.fvds.ru/packages/kibana-8.6.0-amd64.deb
-    #    dest: /tmp/kibana-8.6.0-amd64.deb
-    #    checksum: sha512:https://slava.fvds.ru/packages/kibana-8.6.0-amd64.deb.sha512
-    # - name: Install a .deb package
-    #   ansible.builtin.apt:
-    #     deb: /tmp/kibana-8.6.0-amd64.deb
+    - name: update packages
+      apt: 
+        update_cache: yes
+        upgrade: dist
+    - name: Download kibana
+      ansible.builtin.get_url:
+       url: https://slava.fvds.ru/packages/kibana-8.6.0-amd64.deb
+       dest: /tmp/kibana-8.6.0-amd64.deb
+       checksum: sha512:https://slava.fvds.ru/packages/kibana-8.6.0-amd64.deb.sha512
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /tmp/kibana-8.6.0-amd64.deb
     #### - name: disable security
     ####   shell: "sudo sed -i 's/server.host.*/server.host: \"0.0.0.0\"/' /etc/kibana/kibana.yml"
 
@@ -50,19 +48,19 @@
   hosts: elastic
   become: true
   tasks:
-    # - shell: |   
-    #     echo "{{ kibanapass }}" > /tmp/kp
-    #   delegate_to: kibana
-    # - name: disable security
-    #   shell: "sed -i 's/xpack.security.enabled.*/xpack.security.enabled: false/' /etc/elasticsearch/elasticsearch.yml && \
-    #   sed -i 's/xpack.security.enrollment.enabled.*/xpack.security.enrollment.enabled: false/' /etc/elasticsearch/elasticsearch.yml &&\
-    #   sed -i 's/## -Xms.*/-Xms1024m/' /etc/elasticsearch/jvm.options &&\
-    #   sed -i 's/## -Xmx.*/-Xms1024m/' /etc/elasticsearch/jvm.options"
-    # - name: start and enable elastic
-    #   ansible.builtin.systemd:
-    #     daemon_reload: yes
-    #     state: restarted
-    #     name: elasticsearch
+    - shell: |   
+        echo "{{ kibanapass }}" > /tmp/kp
+      delegate_to: kibana
+    - name: disable security
+      shell: "sed -i 's/xpack.security.enabled.*/xpack.security.enabled: false/' /etc/elasticsearch/elasticsearch.yml && \
+      sed -i 's/xpack.security.enrollment.enabled.*/xpack.security.enrollment.enabled: false/' /etc/elasticsearch/elasticsearch.yml &&\
+      sed -i 's/## -Xms.*/-Xms1024m/' /etc/elasticsearch/jvm.options &&\
+      sed -i 's/## -Xmx.*/-Xms1024m/' /etc/elasticsearch/jvm.options"
+    - name: start and enable elastic
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        state: restarted
+        name: elasticsearch
 
 - name: Kibana deploying 2
   hosts: kibana
@@ -88,18 +86,4 @@
        name: kibana
        enabled: yes
 
-
-
-
-
-
-
-  #  - name: disable security
-  #    shell: "sed -i 's/xpack.security.enabled.*/xpack.security.enabled: false/' /etc/elasticsearch/elasticsearch.yml && \
-  #    sed -i 's/xpack.security.enrollment.enabled.*/xpack.security.enrollment.enabled: false/' /etc/elasticsearch/elasticsearch.yml"
-  #  - name: start and enable elastic
-  #    ansible.builtin.systemd:
-  #     daemon_reload: yes
-  #     state: restarted
-  #     name: elasticsearch
  

@@ -2,31 +2,27 @@
   hosts: webservers
   become: true
   tasks:
-    # - name: install repo
-    #   yum: 
-    #     name: epel-release 
-    #     state: latest
-    # - name: upgrade all packages
-    #   yum: 
-    #     name: '*' 
-    #     state: latest
-    # - name: install nginx
-    #   yum: 
-    #     name: nginx
-    #     state: latest
-    # - name: Enable and start nginx 
-    #   ansible.builtin.systemd:
-    #     name: nginx
-    #     state: started
-    #     enabled: yes
-    # - name: install wget
-    #   yum: 
-    #     name: wget
-    #     state: latest
-    ### - name: Deploy the site
-    ###   ansible.builtin.get_url:
-    ###     url: https://slava.fvds.ru/packages/kt_freebie_aironepage.zip
-    ###     dest: /tmp/kt_freebie_aironepage.zip
+    - name: install repo
+      yum: 
+        name: epel-release 
+        state: latest
+    - name: upgrade all packages
+      yum: 
+        name: '*' 
+        state: latest
+    - name: install nginx
+      yum: 
+        name: nginx
+        state: latest
+    - name: Enable and start nginx 
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: yes
+    - name: install wget
+      yum: 
+        name: wget
+        state: latest
     - name: install unzip
       yum: 
          name: unzip

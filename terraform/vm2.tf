@@ -17,7 +17,8 @@ resource "yandex_compute_instance" "webserver2" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-2.id
-    nat       = false
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.webservers_sg.id]
   }
 
   metadata = {
