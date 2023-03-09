@@ -29,6 +29,11 @@ resource "yandex_compute_instance" "kibana" {
 
 }
 
+resource "yandex_compute_snapshot" "kibana-snap" {
+  name           = "kibana-snap"
+  source_disk_id = yandex_compute_instance.kibana.boot_disk.0.disk_id
+}
+
 output "internal_ip_address_kibana" {
   value = yandex_compute_instance.kibana.network_interface.0.ip_address
 }

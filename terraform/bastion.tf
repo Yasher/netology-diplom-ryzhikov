@@ -27,6 +27,10 @@ resource "yandex_compute_instance" "bastion" {
 
 }
 
+resource "yandex_compute_snapshot" "bastion-snap" {
+  name           = "bastion-snap"
+  source_disk_id = yandex_compute_instance.bastion.boot_disk.0.disk_id
+}
 
 output "internal_ip_address_bastion" {
   value = yandex_compute_instance.bastion.network_interface.0.ip_address

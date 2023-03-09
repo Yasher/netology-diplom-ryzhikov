@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+
+echo "########## Деплой prometheus! ##########"
 ip_int_webserver1=$(terraform output internal_ip_address_webserver1)
 ip_int_webserver2=$(terraform output internal_ip_address_webserver2)
 

@@ -26,10 +26,11 @@ resource "yandex_compute_instance" "webserver2" {
   }
 
 }
-#resource "yandex_vpc_network" "network-2" {
- # name = "network2"
-#}
 
+resource "yandex_compute_snapshot" "webserver2-snap" {
+  name           = "webserver2-snap"
+  source_disk_id = yandex_compute_instance.webserver2.boot_disk.0.disk_id
+}
 
 output "internal_ip_address_webserver2" {
   value = yandex_compute_instance.webserver2.network_interface.0.ip_address

@@ -30,7 +30,10 @@ resource "yandex_compute_instance" "elastic" {
 }
 
 
-
+resource "yandex_compute_snapshot" "elastic-snap" {
+  name           = "elastic-snap"
+  source_disk_id = yandex_compute_instance.elastic.boot_disk.0.disk_id
+}
 
 
 output "internal_ip_address_elastic" {

@@ -1,18 +1,4 @@
 
-# data "yandex_compute_instance" "int_kibana_ip" {
-#     name = "kibana"
-#     #instance_id = "epd37iifqpk4hff6rn5p"
-# }
-
-# variable "intkib" {
-#   description = "CIDR block for VPC"
-#   default     = data.yandex_compute_instance.int_kibana_ip.network_interface.0.ip_address
-#    # default = ${internal_ip_address_kibana}
-# }
-
-# output "hjdsfh" {
-#     value = merge(data.yandex_compute_instance.int_kibana_ip.network_interface.0.ip_address, ",nsdvhkjsdf")
-# }
 
 resource "yandex_vpc_security_group" "elastic_sg" {
   name        = "elastic_sg"

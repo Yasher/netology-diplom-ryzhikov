@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+
+echo "########## Деплой filebeat! ##########"
 ip_int_elastic=$(terraform output internal_ip_address_elastic | sed 's/\"//g') 
 
 

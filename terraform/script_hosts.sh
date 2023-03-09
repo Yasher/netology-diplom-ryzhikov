@@ -5,7 +5,7 @@ ip_ext_webserver1=$(terraform output external_ip_address_webserver1)
 ip_ext_webserver2=$(terraform output external_ip_address_webserver2)
 ip_ext_prometheus=$(terraform output external_ip_address_promet)
 ip_ext_grafana=$(terraform output external_ip_address_grafana)
-
+ip_ext_bastion=$(terraform output external_ip_address_bastion)
 
 
 echo "
@@ -19,10 +19,9 @@ kibana ansible_host=$ip_ext_kibana
 [prometheus]
 prometheus ansible_host=$ip_ext_prometheus
 [grafana]
-grafana ansible_host=$ip_ext_grafana" > hosts
+grafana ansible_host=$ip_ext_grafana
+[bastion]
+bastion ansible_host=$ip_ext_bastion" > hosts
 
-#ansible-playbook playbook_prometheus.yml -e "ip_vm=$ip_vm"
-#ansible-playbook playbook_elastic.yml -e "ip_int_elastic=$ip_int_elastic"
 
-#ansible-playbook playbook_webserver.yml
 

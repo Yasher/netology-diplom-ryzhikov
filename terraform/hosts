@@ -1,12 +1,14 @@
 
 [webservers]
-webserver1 ansible_host="158.160.48.99"
-webserver2 ansible_host="158.160.27.104"
+webserver1 ansible_host="51.250.80.138"
+webserver2 ansible_host="158.160.4.120"
 [elastic]
-elastic ansible_host="158.160.17.30"
+elastic ansible_host="158.160.5.170"
 [kibana]
-kibana ansible_host="158.160.3.82"
+kibana ansible_host="158.160.22.194"
 [prometheus]
-prometheus ansible_host="84.201.145.42"
+prometheus ansible_host="51.250.46.178"
 [grafana]
-grafana ansible_host="84.201.150.30"
+grafana ansible_host="51.250.47.38"
+[bastion]
+bastion ansible_host="158.160.5.193"

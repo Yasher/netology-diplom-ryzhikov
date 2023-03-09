@@ -26,10 +26,11 @@ resource "yandex_compute_instance" "prometeus" {
   }
 
 }
-#resource "yandex_vpc_network" "network-2" {
- # name = "network2"
-#}
 
+resource "yandex_compute_snapshot" "prometheus-snap" {
+  name           = "prometheus-snap"
+  source_disk_id = yandex_compute_instance.prometeus.boot_disk.0.disk_id
+}
 
 output "internal_ip_address_promet" {
   value = yandex_compute_instance.prometeus.network_interface.0.ip_address

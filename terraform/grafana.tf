@@ -27,9 +27,11 @@ resource "yandex_compute_instance" "grafana" {
   }
 
 }
-#resource "yandex_vpc_network" "network-2" {
- # name = "network2"
-#}
+
+resource "yandex_compute_snapshot" "grafana-snap" {
+  name           = "grafana-snap"
+  source_disk_id = yandex_compute_instance.grafana.boot_disk.0.disk_id
+}
 
 output "internal_ip_address_grafana" {
   value = yandex_compute_instance.grafana.network_interface.0.ip_address

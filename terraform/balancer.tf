@@ -94,3 +94,8 @@ resource "yandex_alb_load_balancer" "balancer1" {
     }
   }
 }
+
+output "ip_balancer" {
+  value       = yandex_alb_load_balancer.balancer1.listener.0.endpoint.0.address
+  description = "description"
+}

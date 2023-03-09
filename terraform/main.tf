@@ -40,3 +40,13 @@ resource "yandex_vpc_subnet" "subnet-1" {
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.30.0/24"]
 }
+
+# data "yandex_compute_instance" "vm2" {
+#   name = "webserver2"
+# }
+
+# output disk_vm2 {
+#   value       = data.yandex_compute_instance.vm2.boot_disk.0.disk_id
+#   sensitive   = true
+#   description = "description"
+# }

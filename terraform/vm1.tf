@@ -28,6 +28,11 @@ resource "yandex_compute_instance" "webserver1" {
 
 }
 
+resource "yandex_compute_snapshot" "webserver1-snap" {
+  name           = "webserver1-snap"
+  source_disk_id = yandex_compute_instance.webserver1.boot_disk.0.disk_id
+}
+
 
 output "internal_ip_address_webserver1" {
   value = yandex_compute_instance.webserver1.network_interface.0.ip_address
